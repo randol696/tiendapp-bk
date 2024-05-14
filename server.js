@@ -44,6 +44,20 @@ app.get('/data', async (req, res) => {
     }
 });
 
+app.post('/data', async (req, res) => {
+  const { product, price } = req.body;
+
+  try {
+      const client = await pool.connect();
+      const result = await client.query('INSERT INTO tb_product (product, price) VALUES ($1, $2)', [product, price]);
+      res.status(201).json({ message: 'Data inserted successfully.' });
+      client.release();
+  } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+  }
+});
+
 app.put('/data/:id', async (req, res) => {
     try {
         const client = await pool.connect();
