@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors'); // Add this line
 const app = express();
 const port = 3000;
 const { Pool } = require('pg');
@@ -9,13 +10,18 @@ const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString,
 });
+app.use(cors()); // Use cors middleware
+app.use(express.json()); // Parse JSON bodies
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
+  cors({
+    origin: 'http://localhost:5173' // restrict calls to those this address
+  })
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   next();
-});
+});*/
 //Railway postgress conection
 
 app.get('/data', async (req, res) => {
